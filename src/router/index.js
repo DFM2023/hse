@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+// 0. 如果使用模块化机制编程，导入Vue和VueRouter，要调用 Vue.use(VueRouter)
 
 Vue.use(Router)
 
 /* Layout */
+// 1. 定义 (路由) 组件。
 import Layout from '@/layout'
 
 /* Router Modules */
@@ -34,7 +36,12 @@ import Layout from '@/layout'
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
+// 2. 定义路由(将路由和组件进行映射)
+// 每个路由应该映射一个组件。 其中"component" 可以是
+
 export const constantRoutes = [
+  // 主路由
   {
     path: '/redirect',
     component: Layout,
@@ -75,6 +82,26 @@ export const constantRoutes = [
         path: 'dashboard',
         component: () => import('@/views/dashboard/index'),
         meta: { title: '安全生产看板', icon: 'dashboard', affix: true }
+      }
+    ]
+  },
+  {
+    path: '/safe_insp',
+    component: Layout,
+    meta: { title: '安全点巡检', icon: 'clipboard' },
+    children: [
+      {
+        path: 'safe_insp',
+        component: () => import('../views/safe_insp/index'),
+        meta: { title: '安全点巡检', icon: 'clipboard', icon: 'list', noCache: true }
+      },
+      {
+        path: 'edit_form/create',
+        name: 'EditForm',
+        hidden: true,
+        component: () => import('../views/safe_insp/component/create'),
+        meta: { title: '安全点巡检新增', icon: 'list', noCache: true }
+
       }
     ]
   }
