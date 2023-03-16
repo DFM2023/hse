@@ -96,7 +96,7 @@ export const constantRoutes = [
         meta: { title: '安全点巡检', icon: 'clipboard', icon: 'list', noCache: true }
       },
       {
-        path: 'edit_form/create',
+        path: 'create',
         name: 'EditForm',
         hidden: true,
         component: () => import('../views/safe_insp/component/create'),

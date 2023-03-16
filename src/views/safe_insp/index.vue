@@ -13,31 +13,11 @@
         </el-col>
       </div>
       <!-- 侧边栏搜索框 -->
+      <Search funid="safe_insp" @search="search" />
       <div>
         <!-- <Search funid="safe_insp" @search="search" /> -->
       </div>
     </div>
-    <!-- <div class="searchBox">
-      <el-dropdown>
-        <el-button plain>单据状态<i class="el-icon-arrow-down "></i>
-        </el-button>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>巡检单编号</el-dropdown-item>
-          <el-dropdown-item>巡检名称</el-dropdown-item>
-          <el-dropdown-item>巡检状态</el-dropdown-item>
-          <el-dropdown-item>巡检日期</el-dropdown-item>
-          <el-dropdown-item>巡检人员</el-dropdown-item>
-          <el-dropdown-item>巡检频率</el-dropdown-item>
-          <el-dropdown-item>备注</el-dropdown-item>
-          <el-dropdown-item>已巡检数量</el-dropdown-item>
-          <el-dropdown-item>待巡检数量</el-dropdown-item>
-          <el-dropdown-item>不符合数量</el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
-      <el-input  placeholder="请输入内容"  v-model="input2"> </el-input>
-      <el-button type="primary" icon="el-icon-search">搜索</el-button>
-    </div> -->
-
     <el-card>
       <el-table
         ref="multipleTable"
@@ -127,17 +107,20 @@
 </template>
 
 <script>
-
+import Search from '@/components/Search' // 导入子组件 在HTML中直接使用
+import api from './api'
 export default {
   components: {
-
+    Search
   },
   props: {
 
   },
   data() {
     return {
-      tableData: []
+      whereSql: '',
+      tableData: [],
+      multipleSelection: []
     }
   },
   computed: {
@@ -150,14 +133,28 @@ export default {
 
   },
   mounted() {
-
+    this.getList()
   },
   methods: {
+    handleSelectionChange(val) {
+        this.multipleSelection = val;
+      },
     editCreate() {
-      const param = `/insp/edit_form/create`
+      const param = `/safe_insp/create`
       this.$router.push(param)
+    },
+    getList() {
+      api.getData(
+        this.whereSql
+      ).then((data) => {
+        console.log(data,'data');
+        this.tableData = data.data.root
+      })
+    },
+    search(sql) {
+      this.whereSql = sql
+      this.getList()
     }
-
   }
 }
 </script>
