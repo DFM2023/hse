@@ -32,7 +32,7 @@
         />
         <el-table-column
           prop="safe_insp__insp_code"
-          label="巡检编号"
+          label="巡检单编号"
           width="120"
         >
           <template slot-scope="scope">{{ scope.row.safe_insp__insp_code }}</template>
@@ -136,10 +136,21 @@ export default {
     this.getList()
   },
   methods: {
+    //选项框选择方法
+    toggleSelection(rows) {
+        if (rows) {
+          rows.forEach(row => {
+            this.$refs.multipleTable.toggleRowSelection(row);
+          });
+        } else {
+          this.$refs.multipleTable.clearSelection();
+        }
+      },
     handleSelectionChange(val) {
         this.multipleSelection = val;
       },
     editCreate() {
+      //新增按钮跳转路由方法
       const param = `/safe_insp/create`
       this.$router.push(param)
     },
@@ -147,14 +158,14 @@ export default {
       api.getData(
         this.whereSql
       ).then((data) => {
-        console.log(data,'data');
+        console.log(data,'主页data');
         this.tableData = data.data.root
       })
     },
     search(sql) {
       this.whereSql = sql
       this.getList()
-    }
+    },
   }
 }
 </script>
