@@ -3,21 +3,22 @@
     <div class="safeHead">
       <div>
         <el-col>
-          <el-button type="warning">测试</el-button>
+          <el-button type="warning" @clcik="test">测试</el-button>  
+          <!-- 完成 -->
           <el-button type="primary" @click="editCreate">新增</el-button>
-          <el-button type="primary">删除</el-button>
-          <el-button type="primary">保存</el-button>
-          <el-button type="primary">复制</el-button>
-          <el-button type="primary">图文附件</el-button>
-          <el-button type="primary">另存数据</el-button>
+          <!-- 完成 -->
+          <el-button type="primary" @click="editDelete">删除</el-button>
+          <!-- 完成 -->
+          <el-button type="primary" @click="editSave">保存</el-button>
+          
+          <el-button type="primary" >图文附件</el-button>
+          <el-button type="primary" >另存数据</el-button>
         </el-col>
       </div>
       <!-- 侧边栏搜索框 -->
       <Search funid="safe_insp" @search="search" />
-      <div>
-        <!-- <Search funid="safe_insp" @search="search" /> -->
+
       </div>
-    </div>
     <el-card>
       <el-table
         ref="multipleTable"
@@ -49,7 +50,7 @@
           label="巡检状态"
           width="120"
         >
-          <template slot-scope="scope">{{ scope.row.safe_insp__insp_state }}</template>
+          <template slot-scope="scope">{{ scope.row.safe_insp__insp_state == 1?'已巡检':'巡检中' }}</template>
         </el-table-column>
         <el-table-column
           prop="safe_insp__insp_date"
@@ -120,7 +121,7 @@ export default {
     return {
       whereSql: '',
       tableData: [],
-      multipleSelection: []
+      ids: [] //数据行id数组
     }
   },
   computed: {
@@ -147,14 +148,17 @@ export default {
         }
       },
     handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
+      this.ids = val.map((item,i) =>{
+        return item.safe_insp__safe_insp_id //map 方法这里返回 为新数组当前索引数据
+      })
+    },
     editCreate() {
       //新增按钮跳转路由方法
       const param = `/safe_insp/create`
       this.$router.push(param)
     },
     getList() {
+      //获取表单数据
       api.getData(
         this.whereSql
       ).then((data) => {
@@ -164,10 +168,40 @@ export default {
     },
     search(sql) {
       this.whereSql = sql
+      console.log(sql,'sqlsqlsqlsql');
       this.getList()
+    },
+    test(){ //测试方法
+      this.$refs.multipleTable.clearSelection() // 通过ref拿到el-table的内置方法
+      console.log(this.$refs,'multipleTable');
+    },
+    editCopy() {
+      //复制方法
+    },
+    editDelete() {
+        //删除方法
+        if (this.ids && this.ids.length > 0) {
+        this.$confirm('确认删除所选数据？').then(() => {
+          api.Delete(this.ids).then(data => {
+            console.log(data);
+            if (data.success) {
+              this.getList()
+              this.$message.success('删除成功！')
+            } else {
+              this.$message.error(data.message)
+            }
+          })
+        }).catch(() => {})
+      } else {
+        this.$message.warning('请选择数据进行删除')
+      }
+    } ,
+    editSave() {
+
     },
   }
 }
+
 </script>
 
 <style scoped lang="scss">

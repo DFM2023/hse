@@ -102,6 +102,12 @@ export const constantRoutes = [
         component: () => import('../views/safe_insp/component/create'),
         meta: { title: '安全点巡检新增', icon: 'list', noCache: true }
 
+      },
+      {
+        path: 'insp_name',
+        name: '点巡检标准项',
+        component: () => import('../views/insp_name/index'),
+        meta: { title:'点巡检标准', icon: 'edit' , noCache: true }
       }
     ]
   }
