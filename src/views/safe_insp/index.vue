@@ -102,6 +102,15 @@
           <template slot-scope="scope">{{ scope.row.safe_insp__insp_non }}</template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageInfo.pageNo"
+        :page-sizes="[20, 50, 100, 200]"
+        :page-size="pageInfo.pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="pageInfo.total">
+    </el-pagination>
     </el-card>
   </div>
 
@@ -121,7 +130,12 @@ export default {
     return {
       whereSql: '',
       tableData: [],
-      ids: [] //数据行id数组
+      ids: [], //数据行id数组
+      pageInfo:{
+        pageSize:'20',
+        pageNo:'0',
+        total:''
+      }
     }
   },
   computed: {
@@ -160,10 +174,13 @@ export default {
     getList() {
       //获取表单数据
       api.getData(
+        this.pageInfo.pageNo, // 当前页数
+        this.pageInfo.pageSize, // 当前总页数
         this.whereSql
       ).then((data) => {
         console.log(data,'主页data');
         this.tableData = data.data.root
+        this.pageInfo.total = data.data.total
       })
     },
     search(sql) {
@@ -199,6 +216,16 @@ export default {
     editSave() {
 
     },
+    handleSizeChange(page) {
+      this.pageInfo.pageSize = page
+      this.pageInfo.pageNo = 0
+      this.getList()
+    },
+    handleCurrentChange(page) {
+      this.pageInfo.pageNo = page-1
+      this.getList()
+    },
+
   }
 }
 
