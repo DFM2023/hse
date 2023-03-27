@@ -132,9 +132,9 @@ export default {
       tableData: [],
       ids: [], //数据行id数组
       pageInfo:{
-        pageSize:'20',
-        pageNo:'0',
-        total:''
+        pageSize:20,
+        pageNo:0,
+        total:0
       }
     }
   },

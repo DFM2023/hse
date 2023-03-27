@@ -4,7 +4,7 @@ import store from '@/store/modules/user'
 var roles = store.state.roles.replace(/;/g, '')
 
 export default {
-  getData( pageNo, pageSize,whereSql) {
+  getData(pageSize, pageNo, whereSql) {
     return request({
       url: `commonAction.do?eventcode=query_data&funid=queryevent&pagetype=grid&query_funid=insp_name&user_id=${roles}`,
       method: 'post',
@@ -15,7 +15,7 @@ export default {
     return request({
       url: `/commonAction.do`,
       method: 'post',
-      data: `funid=insp_name&keyid=&pagetype=editgrid&eventcode=save_eg&insp_name__insp_name=${data.insp_name__insp_name}&insp_name__insp_name_id=${data.insp_name__insp_name_id}&insp_name__org_id=${data.insp_name__org_id}&insp_name__dept_id=${data.insp_name__dept_id}&user_id=administrator&dataType=json`
+      data: `${data}`
     }).then(response => response.data)
   },
   auditSave(data) {
@@ -26,7 +26,6 @@ export default {
     }).then(response => response.data)
   },
   Delete(ids) {
-    console.log(ids,'ids++++++++++++');
     let keys = ''
     ids.forEach(d => {
       keys += 'keyid=' + d + '&'
