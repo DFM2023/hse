@@ -110,7 +110,77 @@ export const constantRoutes = [
         meta: { title:'点巡检标准', icon: 'edit' , noCache: true }
       }
     ]
-  }
+  },
+  {
+    path:'/hidden_danger',
+    component: Layout,
+    redirect:'/hidden_danger/hidden_check',
+    name:'隐患排查治理',
+    meta:{
+      title:'隐患排查治理',
+      icon:'el-icon-s-order'
+    },
+    children: [
+      {
+        path:'hidden_check',
+        component:() =>import('../views/hidden_check/index'),
+        name:'隐患排查',
+        meta: { title:'隐患排查', icon:'form', noCache:true}
+      },
+      {
+        path: 'hidden_check/create',
+        component: () => import('@/views/hidden_check/components/create/index'),
+        name: 'create',
+        hidden: true,
+        meta: { title: '隐患排查新增', icon: 'list', noCache: true }
+      },
+      {
+        path: 'hidden_check/audit/:id',
+        component: () => import('@/views/hidden_check/components/edit_form'),
+        name: 'audit',
+        hidden: true,
+        meta: { title: '隐患排查编辑', icon: 'list', noCache: true }
+      },
+      {
+        path: 'hidden_reform',
+        component: () => import('../views/hidden_reform/index'),
+        name: '隐患整改',
+        meta: { title: '隐患整改', icon: 'el-icon-s-management', noCache: true }
+      },
+      {
+        path: 'hidden_review',
+        component: () => import('../views/hidden_review/index'),
+        name: '隐患验收',
+        meta: { title: '隐患验收', icon: 'el-icon-s-opportunity', noCache: true }
+      },
+    ]
+  },
+  {
+    path: '/sys_dept',
+    component: Layout,
+    redirect: '/sys_dept/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('../views/sys_dept/index'),
+        name: '组织管理',
+        meta: { title: '组织管理', icon: 'guide', noCache: true }
+      }
+    ]
+  },
+  {
+    path: '/sys_user',
+    component: Layout,
+    redirect: '/sys_user/index',
+    children: [
+      {
+        path: 'index',
+        component: () => import('../views/sys_user/index'),
+        name: '用户管理',
+        meta: { title: '用户管理', icon: 'el-icon-user-solid', noCache: true }
+      }
+    ]
+  },
 
 ]
 

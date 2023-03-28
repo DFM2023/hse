@@ -193,6 +193,7 @@ export default {
     },
     create() {
       this.$refs['form'].validate((valid) => {
+        console.log(valid,'validvalidvalid');
         if (valid) {
           const data = `funid=insp_item&fkValue=${this.id}&pfunid=insp_name&keyid=${this.form.insp_item__insp_item_id}&pagetype=editgrid&eventcode=save_eg&insp_item__item_name=${this.form.insp_item__item_name}&insp_item__item_std=${this.form.insp_item__item_std}&insp_item__item_way=${this.form.insp_item__item_way}&insp_item__insp_item_id=${this.form.insp_item__insp_item_id}&insp_item__insp_name_id=${this.id}&user_id=administrator&dataType=json`
           api.Crerte(data).then(data => {

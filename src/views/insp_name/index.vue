@@ -29,9 +29,7 @@
                 <el-table-column
                   label="巡检表名称"
                   width="120">
-                <template slot-scope="scope">
-                  {{ scope.row.insp_name__insp_name }}
-                </template>
+                <template slot-scope="scope">{{ scope.row.insp_name__insp_name }}</template>
                 </el-table-column>
                 <el-table-column
                   label="操作"
@@ -206,7 +204,7 @@ export default {
       this.pageInfo.pageNo = page
       this.getList()
     },
-    rowClick(row) {
+    rowClick(row) { //单击目标会产生的事件
       this.id = row.insp_name__insp_name_id
       this.$refs.inspItem.getList(this.id, false)
     },
@@ -232,12 +230,12 @@ export default {
         }
       })
     },
-    handleSelectionChange(val) {
+    handleSelectionChange(val) { //当选择项发生变化时会触发该事件
       console.log(val,'form的数据'); //通过传入val得到form的数据
       this.ids = val.map(d => d.insp_name__insp_name_id) //拿到数据中的id赋值给ids
       console.log(this.ids,'id的值');
     },
-    cellDblclick(row) { 
+    cellDblclick(row) {  //双击触发事件
       this.dialogFormVisible = true
       this.form = JSON.parse(JSON.stringify(row))
     },
