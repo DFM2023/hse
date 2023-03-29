@@ -3,6 +3,7 @@ import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
+// 该模块的初始状态
 const state = {
   token: getToken(),
   name: '',
@@ -15,6 +16,7 @@ const state = {
   deptId: ''
 }
 
+// 用于更新状态
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
@@ -45,6 +47,7 @@ const mutations = {
   }
 }
 
+// 异步处理状态，类似vue实例中methods用法一致
 const actions = {
   // user login
   login({ commit, dispatch }, userInfo) {

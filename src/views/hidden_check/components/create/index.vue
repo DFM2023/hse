@@ -18,26 +18,27 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="巡检状态">
-              <el-select v-model="form.hidden_danger__hidden_state" placeholder="请选择" :disabled="!disabled"></el-select>
-              <el-option
+              <el-select v-model="form.hidden_danger__hidden_state" placeholder="请选择" :disabled="!disabled">
+                <el-option
                   v-for="item in hiddenState"
                   :key="item.funall_control__value_data"
                   :label="item.funall_control__display_data"
                   :value="item.funall_control__value_data"
-                />
+                /></el-select>
+              
             </el-form-item>
           </el-col>
             <el-col :span="8">
-            <el-form-item label="检查人"> 
+            <el-form-item label="检查人" prop="hidden_danger__check_man"> 
               <el-input v-model="form.hidden_danger__check_man" >
-              <el-button slot="append" icon="el-icon-search" @click="checkDeptVisible = !checkDeptVisible"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="checkManVisible = !checkManVisible"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="检查部门">
               <el-input v-model="form.hidden_danger__check_dept">
-              <el-button slot="append" icon="el-icon-search" @click="reformDeptVisible = !reformDeptVisible"></el-button>
+              <el-button slot="append" icon="el-icon-search" @click="checkDeptVisible = !checkDeptVisible"></el-button>
               </el-input>
             </el-form-item>
           </el-col>
@@ -168,7 +169,7 @@ export default {
     return {
       form:{
         hidden_danger__hidden_code: '',
-        hidden_danger__hidden_state: '',
+        hidden_danger__hidden_state: '1',
         hidden_danger__check_man:'',
         hidden_danger__check_dept:'',
         hidden_danger__check_date:'',
@@ -207,13 +208,14 @@ export default {
       reformManVisible: false,
       reformDeptVisible:false,
       disabled: false,
+      options: [],
     }
   },
   computed: {
 
   },
   created() {
-    this.getList()
+    // this.getList()
     this.getHiddenState()
   },
   mounted() {
@@ -246,9 +248,11 @@ export default {
         if (valid) {
           api.Crerte(this.form).then(data => {
             if (data.success) {
+              this.getList()
               this.$message.success('保存成功！')
-              const param = `/hidden_danger/hidden_check/audit/${data.data.keyid}`
-              this.$router.push(param)
+              this.$store.dispatch('tagsView/delView', this.$route)
+              this.$router.push('/hidden_danger/hidden_check')
+              
             } else {
               this.$message.error(data.message)
             }
@@ -260,7 +264,10 @@ export default {
     del() {},
     audit() {},
     unaudit() {},
-    back() {},
+    back() {
+      this.$store.dispatch('tagsView/delView', this.$route)
+      this.$router.push('/hidden_danger/hidden_check')
+    },
     getCheckMan(data) {
       this.form.hidden_danger__check_man = data.sys_user__user_name
       this.form.hidden_danger__check_man_id = data.sys_user__user_id
@@ -317,6 +324,11 @@ export default {
       this.form.hidden_danger__reform_dept = data.map(d => { return d.sys_dept__dept_name }).join(';')
       this.form.hidden_danger__reform_dept_id = data.map(d => { return d.sys_user__dept_id }).join(';')
       this.reformManVisible = false
+    },
+    getReformDept(data) {
+      this.form.hidden_danger__reform_dept = data.sys_dept__dept_name
+      this.form.hidden_danger__reform_dept_id = data.sys_dept__dept_id
+      this.reformDeptVisible = false
     },
     
   },

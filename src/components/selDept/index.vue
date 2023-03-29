@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="6">
         <el-card>
-          <el-tree :data="treeData" default-expand-all :props="defaultProps" highlight-current="true" expand-on-click-node="false" @node-click="handleNodeClick" />
+          <el-tree :data="treeData" default-expand-all :props="defaultProps" :highlight-current="true" :expand-on-click-node="false" @node-click="handleNodeClick" />
         </el-card>
       </el-col>
       <el-col :span="18">

@@ -164,6 +164,7 @@ export default {
       },
       selUserVisible: false,
       inspNameVisible: false,
+      data:[]
     }
   },
   computed: {
@@ -213,6 +214,15 @@ export default {
       this.safe_insp__insp_name_id = data.insp_name__insp_name_id
       this.inspNameVisible = false
   },
+  SelUser() {
+    this.updateUsers(this.$refs.selUser.Users)
+      this.selUserVisible = false
+  },
+  updateUsers(data) {
+      this.form.safe_insp__insp_man = data.map(d => { return d.sys_user__user_name }).join(';')
+      this.form.safe_insp__insp_man_id = data.map(d => { return d.sys_user__user_id }).join(';')
+      this.selUserVisible = false
+    },
   }
 }
 </script>

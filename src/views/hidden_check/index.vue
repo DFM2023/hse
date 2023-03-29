@@ -24,7 +24,7 @@
           prop="hidden_danger__hidden_state"
           label="隐患状态"
           width="120">
-          <template slot-scope="scope">{{ scope.row.hidden_danger__hidden_state }}</template>
+          <template slot-scope="scope">{{ scope.row.hidden_danger__hidden_state == 1 ? '排查中' : scope.row.hidden_danger__hidden_state == 2 ? '待整改' :scope.row.hidden_danger__hidden_state == 3 ? '整改中' :scope.row.hidden_danger__hidden_state == 4 ? '待验收' : '已验收' }}</template>
         </el-table-column>
         <el-table-column
           prop="hidden_danger__hidden_code"
@@ -92,6 +92,7 @@ export default {
         pageNo:0,
         total:0
       },
+      data:[]
     }
   },
   computed: {
@@ -112,7 +113,9 @@ export default {
       this.getList()
     },
     cellDblclick() {},
-    handleSelectionChange() {},
+    handleSelectionChange(val) {
+      this.ids = val.map(d => d.hidden_danger__hidden_danger_id)
+    },
     getList() {
       let pageNo = this.pageInfo.pageNo * this.pageInfo.pageSize - this.pageInfo.pageSize
       if (pageNo < 0) {
@@ -126,7 +129,10 @@ export default {
         console.log(data,'隐患排查data');
         if(data.success) {
           this.tableData = data.data.root
-          
+          this.pageInfo.total = data.data.total
+          this.keyids = this.data.map(d => {
+            return d.hidden_danger__hidden_danger_id
+          }).join()
         }else{
           this.$message.error(data.message)
         }
@@ -143,7 +149,8 @@ export default {
       this.getList()
     },
     edit() {
-
+      const param = `/hidden_danger/hidden_check/audit/${row.hidden_danger__hidden_danger_id}`
+      this.$router.push(param)
     },
     newcreate() {
       const param = `/hidden_danger/hidden_check/create`
