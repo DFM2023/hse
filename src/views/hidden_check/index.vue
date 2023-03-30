@@ -92,7 +92,8 @@ export default {
         pageNo:0,
         total:0
       },
-      data:[]
+      data:[],
+      ids:[]
     }
   },
   computed: {
@@ -114,8 +115,10 @@ export default {
     },
     cellDblclick() {},
     handleSelectionChange(val) {
+      console.log(val,'valval');
       this.ids = val.map(d => d.hidden_danger__hidden_danger_id)
     },
+    
     getList() {
       let pageNo = this.pageInfo.pageNo * this.pageInfo.pageSize - this.pageInfo.pageSize
       if (pageNo < 0) {
@@ -156,7 +159,25 @@ export default {
       const param = `/hidden_danger/hidden_check/create`
       this.$router.push(param)
     },
-    del() {},
+    del() {
+      this.editDelete()
+    },
+    editDelete() {
+      if (this.ids && this.ids.length > 0) {
+        this.$confirm('确认删除？').then(() => {
+          api.Delete(this.ids).then(data => {
+            if (data.success) {
+              this.getList()
+              this.$message.success('删除成功！')
+            } else {
+              this.$message.error(data.message)
+            }
+          })
+        }).catch(() => {})
+      } else {
+        this.$message.warning('请选择数据进行删除')
+      }
+    },
     audit() {},
     unaudit() {},
   },
